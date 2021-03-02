@@ -1,13 +1,31 @@
 <template>
-    <div class="accordion">
+    <div class="accordion col-3 col-md-2">
         <div id="accordion">
             <div class="card">
                 <div class="card-header">
                     <a class="card-link" data-toggle="collapse" href="#collapseOne">
-                        功能1
+                        热门
                     </a>
                 </div>
-                <div id="collapseOne" class="collapse " data-parent="#accordion">
+                <div id="collapseOne" class="collapse" data-parent="#accordion">
+                    <div class="card-body border-bottom">
+                        条目1
+                    </div>
+                    <div class="card-body border-bottom">
+                        条目2
+                    </div>
+                    <div class="card-body border-bottom">
+                        条目3
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <a class="card-link" data-toggle="collapse" href="#one">
+                        美食
+                    </a>
+                </div>
+                <div id="one" class="collapse " data-parent="#accordion">
                     <div class="card-body border-bottom">
                         条目1
                     </div>
@@ -22,7 +40,7 @@
             <div class="card">
                 <div class="card-header">
                     <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
-                        功能2
+                        娱乐
                     </a>
                 </div>
                 <div id="collapseTwo" class="collapse" data-parent="#accordion">
@@ -34,10 +52,34 @@
             <div class="card">
                 <div class="card-header">
                     <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
-                        功能3
+                        出行
                     </a>
                 </div>
                 <div id="collapseThree" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        条目1
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#two">
+                        学习
+                    </a>
+                </div>
+                <div id="two" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        条目1
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#three">
+                        周边
+                    </a>
+                </div>
+                <div id="three" class="collapse" data-parent="#accordion">
                     <div class="card-body">
                         条目1
                     </div>
@@ -54,9 +96,6 @@
 </script>
 
 <style scoped>
-    .accordion{
-        width: 10%;
-    }
     .card-body {
         font-size: small;
         cursor: pointer;

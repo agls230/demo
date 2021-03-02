@@ -8,13 +8,13 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse col-md-9" id="collapsibleNavbar">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav col-md-12 d-md-flex justify-content-md-around">
                     <!-- 菜单 -->
                     <li class="nav-item">
-                        <a class="nav-link">导航1</a>
+                        <a class="nav-link" @click="indexPage">首页推荐</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link">导航2</a>
+                        <a class="nav-link" @click="classifyPage">浏览分类</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link">导航3</a>
@@ -53,14 +53,10 @@
                             <a class="dropdown-item" @click="toPre">权限管理</a>
                         </div>
                     </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" @click="showSe"><i class="fa fa-search">搜索</i></a>
+                    </li>
                 </ul>
-                <!--            搜索框-->
-                <div class="d-none d-md-block">
-                    <form class="form-inline">
-                        <input class="form-control" type="text" placeholder="Search">
-                        <button class="btn btn-success" type="button" @click="se"><i class="fa fa-search"></i></button>
-                    </form>
-                </div>
             </div>
             <div class="position-absolute align-items-center col-md-2 col-6" style="right: 0;top: 8px">
                 <div class="d-flex">
@@ -77,6 +73,15 @@
                 </div>
             </div>
         </nav>
+        <!--        弹出搜索框-->
+        <div class="d-none d-md-block col-md-5 position-relative se" :class="{'seStyle':seStyle}">
+            <div class="input-group position-relative ses">
+                <input type="text" class="form-control" placeholder="搜索">
+                <div class="input-group-append">
+                    <button class="btn btn-success" type="submit">Go</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -86,10 +91,20 @@
         data() {
             return {
                 logSuccess: false,
-                img: ''
+                img: '',
+                seStyle: false,
+                i: 0
             }
         },
         methods: {
+            // 跳转首页
+            indexPage() {
+                this.$router.push('/')
+            },
+            // 跳转分类页
+            classifyPage() {
+                this.$router.push('/classify')
+            },
             // 跳转用户管理
             toUser() {
                 this.$router.push('/backstage/user')
@@ -102,9 +117,15 @@
             toPre() {
                 this.$router.push('/backstage/permission')
             },
-            // 搜索
-            se() {
-
+            // 显示搜索
+            showSe() {
+                if (this.i % 2 === 0) {
+                    this.seStyle = true
+                    this.i++
+                } else {
+                    this.seStyle = false
+                    this.i++
+                }
             },
             // 跳转登录
             toLog() {
@@ -152,8 +173,25 @@
         text-decoration: underline;
     }
 
-    .dropdown-menu{
-        background-color: rgba(255,255,255,0);
+    .dropdown-menu {
+        background-color: rgba(255, 255, 255, 0);
         border: none;
+    }
+
+    .se {
+        left: 50%;
+        height: 0;
+        overflow: hidden;
+        transform: translateX(-50%);
+        transition: height ease 300ms;
+    }
+
+    .seStyle {
+        height: 80px;
+    }
+
+    .ses {
+        top: 50%;
+        transform: translateY(-50%);
     }
 </style>

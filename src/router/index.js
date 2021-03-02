@@ -8,6 +8,8 @@ const Register = () => import('../views/Register')
 const Login = () => import('../views/Login')
 // 首页
 const Index = () => import('../views/Index')
+// 分类页
+const Classify = () => import('../views/Classify')
 // 个人信息页
 const ProFile = () => import('../views/ProFile')
 // 后台用户页
@@ -56,6 +58,11 @@ const routes = [
         path: '/proFile',
         name: 'ProFile',
         component: ProFile
+    },
+    {
+        path: '/classify',
+        name: 'Classify',
+        component: Classify
     },
     {
         path: '/backstage/user',
