@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="position-absolute col-12 log">
         <div class="col-10 offset-1 col-md-4 offset-md-4">
             <label for="username">用户名：</label>
             <input class="form-control mb-3" id="username" placeholder="请输入用户名" type="text"
@@ -23,6 +23,7 @@
 <script>
     import {mapMutations} from 'vuex'
     import {request} from "../network/request";
+    import {success} from "../util/promptBox";
 
     export default {
         name: "Login",
@@ -34,7 +35,7 @@
             }
         },
         methods: {
-            ...mapMutations(["changeLogin"]),
+            ...mapMutations(["changeCookie"]),
             // 跳转注册
             toReg() {
                 this.$router.push('/register')
@@ -57,7 +58,11 @@
                     })
                 }).then(res => {
                     if (res.data.res === 'ok') {
-                        this.$router.replace('/backstage/user')
+                        success('登陆成功。')
+                        // 写入cookie
+                        this.$cookies.set('login', this.username, '1d')
+                        // 登陆成功后跳转到来的页面或回到首页
+                        this.$router.replace(this.$route.params.redirect || '/')
                     } else {
                         this.$refs.logTip.innerHTML = res.data.res
                     }
@@ -82,5 +87,11 @@
     i {
         margin: 0 10px;
         cursor: pointer;
+    }
+
+    .log {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
     }
 </style>

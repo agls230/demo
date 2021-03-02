@@ -3,7 +3,7 @@ import axios from 'axios'
 // 创建axios实例
 const instance = axios.create({
     baseURL: '/api',
-    timeout: 5000
+    timeout: 10000
 })
 
 // 导出封装的网络请求函数
@@ -14,7 +14,7 @@ export function request(config) {
 // 请求拦截
 instance.interceptors.request.use(config => {
     // 是否携带cookie
-    config.withCredentials = true
+    config.withCredentials = false
     // 添加token到本地
     if (localStorage.getItem('token')) {
         config.headers.Authorization = localStorage.getItem('token')

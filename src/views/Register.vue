@@ -1,7 +1,7 @@
 <template>
     <div>
         <button @click="zzz">sss</button>
-        <div class="row">
+        <div class="position-absolute col-12 log">
             <div class="col-10 offset-1 col-md-4 offset-md-4 reg">
                 <div class="transY" ref="transY">
                     <!--                    发送邮箱验证-->
@@ -48,6 +48,7 @@
 
 <script>
     import {request} from "../network/request";
+    import {success} from "../util/promptBox";
 
     export default {
         name: "Register",
@@ -139,8 +140,9 @@
                             reject(err)
                         })
                     }).then(res => {
-                        console.log(this.username, this.password, this.email)
+                        // console.log(this.username, this.password, this.email)
                         if (res.data.res === '注册成功！') {
+                            success('注册成功！')
                             this.$router.replace({
                                 name: 'Login',
                                 params: {username: this.username, password: this.password}
@@ -153,6 +155,7 @@
                     })
                 }
             },
+            // 测试按钮
             zzz() {
                 this.transY()
             }
@@ -174,4 +177,9 @@
         height: inherit;
     }
 
+    .log {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
 </style>

@@ -1,79 +1,74 @@
 <template>
-    <div class="col-12 text-secondary">
-        <nav-bar/>
-        <top/>
-        <!--            当前信息导航-->
-        <div class="row m-3">
-            <div class="input-group offset-md-4 col-md-4">
-                <input type="text" class="form-control" v-model="findById" placeholder="由用户名搜索">
-                <div class="input-group-append">
-                    <button class="btn btn-success" @click="searchId" type="button"><i class="fa fa-search"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!--            表头-->
-        <div class="row border-bottom text-dark" style="height: 40px">
-            <div class="col-md-1 offset-md-3">序号</div>
-            <div class="col-md-1">id</div>
-            <div class="col-md-1">角色</div>
-            <div class="col-md-1">描述</div>
-            <div class="col-md-2 text-center">操作</div>
-        </div>
-        <div class="hid row mb-1" v-for="(list,index) in allInfo">
-            <div @click="" class="col-md-1 offset-md-3">{{index+1}}</div>
-            <div @click="" class="col-md-1">{{list.id}}</div>
-            <div @click="" class="col-md-1"><input v-model="list.name" disabled></div>
-            <div @click="" class="col-md-1"><input v-model="list.roleDescription" disabled></div>
-            <div class="col-md-2">
-                <button class="btn btn-sm btn-primary" @click="update(index)">修改</button>
-                <button class="btn btn-sm btn-success" @click="updateSuccess(index)">提交</button>
-                <button class="btn btn-sm btn-info" @click.left="insert" @click.right.prevent="roleToUserAdd(index)">新增
-                </button>
-                <button class="btn btn-sm btn-danger" @click.left="del(index)"
-                        @click.right.prevent="roleToUserDel(index)">删除
-                </button>
-                <button class="btn btn-sm btn-warning" @click="roleToPer(index)">权限</button>
-            </div>
+    <div>
+        <nav-bars/>
+        <div class=" d-md-flex table-responsive-md justify-content-center">
+            <table class="table table-hover text-secondary small col-md-6 col-12">
+                <thead>
+                <tr class="text-center">
+                    <th>id</th>
+                    <th>角色</th>
+                    <th>描述</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="text-center" v-for="(list,index) in allInfo">
+                    <td>{{list.id}}</td>
+                    <td>{{list.name}}</td>
+                    <td>{{list.roleDescription}}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary mr-1" @click="updateRole(index)">修改</button>
+                        <button class="btn btn-sm btn-danger mr-1" @click="del(index)">删除</button>
+                        <button class="btn btn-sm btn-warning mr-1" @click="roleToPer(index)">权限</button>
+                        <button class="btn btn-sm btn-primary" @click="addRoles">新增</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
         <!--        新增角色弹框-->
-        <div class="col-md-3 h-auto position-absolute border bg-light" :class="{'active':isActive}">
-            <label for="demo" class="mt-2">角色名:</label>
-            <input type="text" class="form-control mb-3" id="demo" v-model="roleName">
-            <label for="d">描述:</label>
-            <input type="text" class="form-control mb-3" id="d" v-model="roleDes">
-            <button class="btn btn-success offset-md-8 mb-3" @click="insSucc">完成</button>
+        <div class="position-absolute pt-3 pb-3 pl-5 pr-5 border bg-white col-10 col-md-4" :class="{'isShow':isShow}">
+            <label for="name">角色名：</label>
+            <input id="name" type="text" class="form-control m-3" v-model="addRole.roleName">
+            <label for="des">描述：</label>
+            <input id="des" type="text" class="form-control m-3" v-model="addRole.roleDes">
+            <div class="text-right">
+                <button type="button" class="btn btn-success" @click="addSuccess">完成</button>
+            </div>
         </div>
+        <foot class="foot"></foot>
+        <to-top/>
     </div>
 </template>
 
 <script>
-    import NavBar from "../components/NavBar";
-    import Top from '../components/Top';
     import {request} from "../network/request";
+    import NavBars from "../components/NavBars";
+    import Foot from "../components/Foot";
+    import ToTop from "../components/ToTop";
+    import {error, success, tip} from "../util/promptBox";
+    import {delayedRefresh} from "../util/delayedRefresh";
 
     export default {
         name: "Role",
-        components: {
-            NavBar,
-            Top
-        },
         data() {
             return {
                 allInfo: [],
-                findById: '',
-                isActive: true,
-                roleName: '',
-                roleDes: '',
-                fromUserId: 0
+                isShow: true,
+                addRole: {
+                    roleName: '',
+                    roleDes: ''
+                }
             }
+        },
+        components: {
+            ToTop,
+            Foot,
+            NavBars,
         },
         methods: {
             // 页面初始化显示所有角色
             init() {
-                if (this.$route.params.id) {
-                    this.fromUserId = this.$route.params.id
-                }
                 new Promise((resolve, reject) => {
                     request({
                         method: 'post',
@@ -82,91 +77,18 @@
                         resolve(res)
                     })
                 }).then(res => {
-                    console.log(res.data.roles)
                     this.allInfo = res.data.roles
                 })
             },
-            // 给用户新增角色，面向用户
-            roleToUserAdd(index) {
-                if (this.fromUserId > 0) {
-                    new Promise((resolve, reject) => {
-                        request({
-                            method: 'post',
-                            url: '/user/super/addRoleToUser',
-                            params: {
-                                userId: this.fromUserId,
-                                roleId: this.allInfo[index].id
-                            }
-                        }).then(res => {
-                            resolve(res)
-                        })
-                    }).then(res => {
-                        console.log(res.data)
-                    })
-                }
-            },
-            // 删除指定用户的指定角色，面向用户
-            roleToUserDel(index) {
-                if (this.fromUserId > 0) {
-                    new Promise((resolve, reject) => {
-                        request({
-                            method: 'post',
-                            url: '/user/super/delRoleToUser',
-                            params: {
-                                userId: this.fromUserId,
-                                roleId: this.allInfo[index].id
-                            }
-                        }).then(res => {
-                            resolve(res)
-                        })
-                    }).then(res => {
-                        console.log(res.data)
-                    })
-                }
-            },
-            // 由用户名搜索
-            searchId() {
-                if (this.findById.length > 0) {
-                    new Promise((resolve, reject) => {
-                        request({
-                            method: 'post',
-                            url: '/role/role',
-                            params: {
-                                username: this.findById
-                            }
-                        }).then(res => {
-                            resolve(res)
-                        })
-                    }).then(res => {
-                        console.log(res.data.roles)
-                        this.allInfo = res.data.roles
-                        console.log(this.allInfo)
-                    })
-                }
-            },
-            // 修改信息
-            update(index) {
-                let num = index * 2 + 1
-                document.getElementsByTagName('input')[num].removeAttribute('disabled')
-                document.getElementsByTagName('input')[num + 1].removeAttribute('disabled')
-            },
-            // 提交修改的信息
-            updateSuccess(index) {
-                let num = index * 2 + 1
-                document.getElementsByTagName('input')[num].disabled = true
-                document.getElementsByTagName('input')[num + 1].disabled = true
-                request({
-                    method: 'post',
-                    url: '/role/changeSimple',
-                    params: {
+            // 跳转修改角色页面
+            updateRole(index) {
+                this.$router.push({
+                    path: '/backstage/role/roleUpdate',
+                    query: {
                         id: this.allInfo[index].id,
                         name: this.allInfo[index].name,
                         description: this.allInfo[index].roleDescription
                     }
-                }).then(res => {
-                    console.log(res)
-                }).catch(err => {
-                    console.log(err)
                 })
             },
             // 删除
@@ -178,39 +100,59 @@
                         id: this.allInfo[index].id
                     }
                 }).then(res => {
-                    console.log(res)
-                    location.reload()
+                    if (res.data.res === 'ok') {
+                        success()
+                        delayedRefresh()
+                    } else if (res.data.res === '有用户拥有此角色，不能删除此角色') {
+                        tip('有用户拥有此角色，不能删除此角色')
+                    } else {
+                        error()
+                    }
                 }).catch(err => {
                     console.log(err)
                 })
             },
             // 弹出新增窗口
-            insert() {
-                this.isActive = false
+            addRoles() {
+                this.isShow = false
             },
             // 新增角色
-            insSucc() {
-                if (this.roleName.length > 0 && this.roleDes.length > 0) {
-                    request({
-                        method: 'post',
-                        url: '/role/addRole',
-                        params: {
-                            name: this.roleName,
-                            description: this.roleDes
-                        }
+            addSuccess() {
+                if (this.addRole.roleName.length > 0 && this.addRole.roleDes.length > 0) {
+                    new Promise((resolve, reject) => {
+                        request({
+                            method: 'post',
+                            url: '/role/addRole',
+                            params: {
+                                name: this.addRole.roleName,
+                                description: this.addRole.roleDes
+                            }
+                        }).then(res => {
+                            resolve(res)
+                        }).catch(err => {
+                            reject(err)
+                        })
                     }).then(res => {
-                        console.log(res)
-                        location.reload()
+                        if (res.data.res === 'ok') {
+                            success()
+                            delayedRefresh()
+                        } else if (res.data.res === '角色已存在！') {
+                            tip('角色已存在！')
+                        } else {
+                            error()
+                        }
                     }).catch(err => {
                         console.log(err)
+                        error()
                     })
                 }
-                this.isActive = true
+                this.isShow = true
             },
+            // 跳转对角色的权限操作页
             roleToPer(index) {
                 this.$router.push({
-                    name: 'Permission',
-                    params: {roleId: this.allInfo[index].id}
+                    path: '/backstage/role/roleToPer',
+                    query: {roleId: this.allInfo[index].id}
                 })
             }
         },
@@ -221,25 +163,25 @@
 </script>
 
 <style scoped>
-    .hid div input {
-        border: none;
-        outline: none;
-        background-color: rgba(255, 255, 255, 0);
-    }
-
-    .hid div {
-        overflow: hidden;
-    }
+    /*.foot {*/
+        /*position: relative;*/
+        /*bottom: 0;*/
+        /*width: 100%;*/
+    /*}*/
 
     .position-absolute {
         left: 50%;
-        top: 30%;
-        transform: translate(-50%);
-        z-index: 100;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
         border-radius: 5px;
     }
 
-    .active {
+    .isShow {
         display: none;
+    }
+
+    th, td {
+        white-space: nowrap;
     }
 </style>

@@ -7,6 +7,7 @@ import 'bootstrap/dist/js/bootstrap'
 import './assets/font-awesome-4.7.0/css/font-awesome.css'
 import axios from 'axios'
 
+Vue.use(require('vue-cookies'))
 Vue.prototype.axios = axios
 Vue.config.productionTip = false
 
