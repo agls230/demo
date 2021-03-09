@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 import './assets/font-awesome-4.7.0/css/font-awesome.css'
 import axios from 'axios'
 

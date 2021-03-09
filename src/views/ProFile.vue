@@ -15,7 +15,7 @@
                         </div>
                     </div>
                     <div class="col-md-8 col-12">
-                        <table class="table table-hover table-sm">
+                        <table class="table table-hover table-sm mb-0">
                             <tbody>
                             <tr>
                                 <td>用户名：</td>
@@ -31,7 +31,9 @@
                             </tr>
                             </tbody>
                         </table>
-                        <button class="btn btn-sm btn-primary offset-8 offset-md-10">修改</button>
+                    </div>
+                    <div class="col-12 text-right mt-3">
+                        <button class="btn btn-sm btn-primary">修改</button>
                     </div>
                 </div>
             </div>

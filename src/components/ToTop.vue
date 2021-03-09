@@ -50,5 +50,6 @@
         font-size: 18px;
         background-color: rgba(255, 255, 255, 0.3);
         z-index: 9999;
+        cursor: pointer;
     }
 </style>

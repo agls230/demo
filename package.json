@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --open --host:192.168.1.20 --port:8081",
+    "serve": "vue-cli-service serve --open --host:100.82.202.205 --port:8081",
     "build": "vue-cli-service build"
   },
   "dependencies": {
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
+    "bootstrap-icons": "^1.4.0",
     "core-js": "^3.6.5",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1",

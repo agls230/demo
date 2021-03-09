@@ -10,6 +10,8 @@ const Login = () => import('../views/Login')
 const Index = () => import('../views/Index')
 // 分类页
 const Classify = () => import('../views/Classify')
+// 组队页
+const Team = () => import('../views/Team')
 // 个人信息页
 const ProFile = () => import('../views/ProFile')
 // 后台用户页
@@ -63,6 +65,11 @@ const routes = [
         path: '/classify',
         name: 'Classify',
         component: Classify
+    },
+    {
+        path: '/team',
+        name: 'Team',
+        component: Team
     },
     {
         path: '/backstage/user',

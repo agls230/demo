@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <nav class="col-12 col-md-12 navbar navbar-expand-md bg-info navbar-dark">
+        <nav class="col-12 col-md-12 navbar navbar-expand-md bg-primary navbar-dark">
             <!--            logo-->
             <a class="navbar-brand col-md-1 col-4 d-none d-md-block" href="/">文字Logo</a>
             <!--            小屏显示按钮-->
@@ -17,7 +17,7 @@
                         <a class="nav-link" @click="classifyPage">浏览分类</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link">导航3</a>
+                        <a class="nav-link" @click="team">组队大厅</a>
                     </li>
                     <!-- 下拉菜单 -->
                     <li class="nav-item dropdown">
@@ -62,7 +62,7 @@
                 <div class="d-flex">
                     <!--            登录头像-->
                     <div class="img mr-3 ml-3">
-                        <img :src="img" alt="" style="width:100%;height: 100%">
+                        <img :src="img" alt="" style="width:100%;height: 100%" @click="toProFile">
                     </div>
                     <!--登录注册-->
                     <div :class="{'logSuccess':logSuccess}" ref="logSuccess" @click.self="ProFile">
@@ -105,6 +105,10 @@
             classifyPage() {
                 this.$router.push('/classify')
             },
+            // 跳转组队页
+            team() {
+                this.$router.push('/team')
+            },
             // 跳转用户管理
             toUser() {
                 this.$router.push('/backstage/user')
@@ -141,6 +145,9 @@
             // 跳转个人信息
             ProFile() {
                 this.$router.push('/proFile')
+            },
+            toProFile(){
+                this.$router.push('/proFile')
             }
         },
         mounted() {
@@ -174,7 +181,7 @@
     }
 
     .dropdown-menu {
-        background-color: rgba(255, 255, 255, 0);
+        background-color: #007bff;
         border: none;
     }
 
