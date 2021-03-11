@@ -14,7 +14,7 @@
                         <a class="nav-link" @click="indexPage">首页推荐</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" @click="classifyPage">浏览分类</a>
+                        <a class="nav-link" @click="classifyPage">店铺浏览</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" @click="team">组队大厅</a>
@@ -51,6 +51,7 @@
                             <a class="dropdown-item" @click="toUser">用户管理</a>
                             <a class="dropdown-item" @click="toRole">角色管理</a>
                             <a class="dropdown-item" @click="toPre">权限管理</a>
+                            <a class="dropdown-item" @click="toShop">商铺管理</a>
                         </div>
                     </li>
                     <li class="nav-item d-none d-md-block">
@@ -103,7 +104,7 @@
             },
             // 跳转分类页
             classifyPage() {
-                this.$router.push('/classify')
+                this.$router.push('/shop')
             },
             // 跳转组队页
             team() {
@@ -120,6 +121,10 @@
             // 跳转权限管理
             toPre() {
                 this.$router.push('/backstage/permission')
+            },
+            // 跳转商铺管理
+            toShop() {
+                this.$router.push('/backstage/shopManagement')
             },
             // 显示搜索
             showSe() {
@@ -146,7 +151,7 @@
             ProFile() {
                 this.$router.push('/proFile')
             },
-            toProFile(){
+            toProFile() {
                 this.$router.push('/proFile')
             }
         },

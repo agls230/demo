@@ -10,6 +10,7 @@ import axios from 'axios'
 
 Vue.use(require('vue-cookies'))
 Vue.prototype.axios = axios
+Vue.prototype.$bus = new Vue()
 Vue.config.productionTip = false
 
 new Vue({

@@ -1,4 +1,13 @@
 import axios from 'axios'
+import VueRouter from "vue-router";
+import Vue from "vue";
+import {delayedRefresh} from "../util/delayedRefresh";
+
+Vue.use(VueRouter)
+const router = new VueRouter({
+    mode: 'history',
+    base: process.env.BASE_URL
+})
 
 // 创建axios实例
 const instance = axios.create({
@@ -26,7 +35,13 @@ instance.interceptors.request.use(config => {
 
 // 响应拦截
 instance.interceptors.response.use(res => {
-    return res
+    if (res.data.res === 'needLogin') {
+        router.replace('/login')
+        delayedRefresh()
+        return res
+    } else {
+        return res
+    }
 }, err => {
     return Promise.reject(err)
 })

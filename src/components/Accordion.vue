@@ -8,14 +8,14 @@
                     </a>
                 </div>
                 <div id="collapseOne" class="collapse" data-parent="#accordion">
-                    <div class="card-body border-bottom">
-                        条目1
+                    <div class="card-body border-bottom" @click="hot">
+                        火爆商铺>>
                     </div>
-                    <div class="card-body border-bottom">
-                        条目2
+                    <div class="card-body border-bottom" @click="hot">
+                        活跃商铺>>
                     </div>
-                    <div class="card-body border-bottom">
-                        条目3
+                    <div class="card-body border-bottom" @click="hot">
+                        新增商铺>>
                     </div>
                 </div>
             </div>
@@ -85,13 +85,42 @@
                     </div>
                 </div>
             </div>
+            <div class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#four">
+                        医疗
+                    </a>
+                </div>
+                <div id="four" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        条目1
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#five">
+                        教育
+                    </a>
+                </div>
+                <div id="five" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        条目1
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "Accordion"
+        name: "Accordion",
+        methods: {
+            hot() {
+                this.$bus.$emit('sign', 'ok')
+            }
+        }
     }
 </script>
 
