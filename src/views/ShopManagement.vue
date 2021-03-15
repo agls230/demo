@@ -6,14 +6,14 @@
                 <thead>
                 <tr class="text-center">
                     <th>id</th>
-                    <th>商铺名名</th>
+                    <th>商铺名</th>
                     <th>星级</th>
                     <th>描述</th>
                     <th>是否使用</th>
                     <th>是否置顶</th>
                     <th>是否锁定</th>
                     <th>创建时间</th>
-                    <th>账号操作</th>
+                    <th>店铺操作</th>
                 </tr>
                 </thead>
                 <tbody>

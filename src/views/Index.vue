@@ -15,14 +15,14 @@
 
                     <!-- 轮播图片 -->
                     <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="https://static.runoob.com/images/mix/img_fjords_wide.jpg">
+                        <div class="carousel-item active carouselPhoto">
+                            <img src="../assets/photo1.png" alt="">
                         </div>
-                        <div class="carousel-item">
-                            <img src="https://static.runoob.com/images/mix/img_nature_wide.jpg">
+                        <div class="carousel-item carouselPhoto">
+                            <img src="../assets/photo2.png" alt="">
                         </div>
-                        <div class="carousel-item">
-                            <img src="https://static.runoob.com/images/mix/img_mountains_wide.jpg">
+                        <div class="carousel-item carouselPhoto">
+                            <img src="https://static.runoob.com/images/mix/img_mountains_wide.jpg" alt="">
                         </div>
                     </div>
 
@@ -37,6 +37,42 @@
                 </div>
             </div>
         </div>
+        <div class="mb-3">
+            <h5>推荐店铺</h5>
+            <hr>
+            <div class="row no-gutters">
+                <div class="col-3 col-md-1 m-3 con" v-for="(list,index) in allShop">
+                    <div @click="detailShop(index)">
+                        <img src="../assets/shop.jpg" width="100%" height="100%">
+                    </div>
+                    <div class="d-inline-block w-75 name" @click="detailShop(index)">{{list.name}}</div>
+                    <div class="text-right d-inline-block small w-25 text-secondary">
+                        <i class="bi-star-fill text-warning small"></i>
+                        {{list.star}}
+                    </div>
+                    <div class="small text-secondary content" @click="detailShop(index)">{{list.content}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h5>推荐商品</h5>
+            <hr>
+            <div class="row no-gutters">
+                <div class="col-3 col-md-1 m-3 con" v-for="(list,index) in allShopping">
+                    <div @click="detailShopping(index)">
+                        <img src="../assets/shopping.jpg" width="100%" height="100%">
+                    </div>
+                    <div class="d-inline-block w-75 name" @click="detailShopping(index)">{{list.name}}</div>
+                    <div class="text-right d-inline-block small w-25 text-secondary">
+                        <i class="bi-star-fill text-warning small"></i>
+                        {{list.price}}
+                    </div>
+                    <div class="small text-secondary content" @click="detailShopping(index)">{{list.content}}</div>
+                </div>
+            </div>
+        </div>
+
         <!--        底部-->
         <foot/>
         <!--        返回顶部按钮-->
@@ -48,20 +84,80 @@
     import NavBars from "../components/NavBars";
     import Foot from "../components/Foot";
     import ToTop from "../components/ToTop";
+    import {request} from "../network/request";
+    import {mapMutations} from "vuex";
 
     export default {
         name: "Index",
-        components: {ToTop, Foot, NavBars}
+        components: {ToTop, Foot, NavBars},
+        data() {
+            return {
+                allShop: [],
+                allShopping: [],
+            }
+        },
+        methods: {
+            ...mapMutations(['changeComment']),
+            // 跳转到商店详情页
+            detailShop(index) {
+                this.$router.push({
+                    path: '/shopDetail',
+                    query: {shopId: this.allShop[index].id}
+                })
+                const _this = this
+                _this.changeComment({id: this.allShop[index].id, type: 'shop'})
+            }
+        },
+        mounted() {
+            // 商铺
+            new Promise((resolve, reject) => {
+                request({
+                    method: 'get',
+                    url: '/shop/findAll'
+                }).then(res => {
+                    resolve(res)
+                })
+            }).then(res => {
+                this.allShop = []
+                this.allShop = res.data.shops
+            })
+
+            new Promise((resolve, reject) => {
+                request({
+                    method: 'post',
+                    url: '/commodity/getAllCommodityAndControl'
+                }).then(res => {
+                    resolve(res)
+                }).catch(err => {
+                    reject(err)
+                })
+            }).then(res => {
+                this.allShopping = []
+                this.allShopping = res.data.commodityDtoSet
+            })
+        }
     }
 </script>
 
 <style scoped>
-    .carousel-inner img {
+    .carousel-item img {
         width: 100%;
         height: 100%;
     }
-    .carouselPhoto{
+
+    .carouselPhoto {
         height: 200px;
         overflow: hidden;
+    }
+
+    .con div {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .name:hover, .content:hover {
+        text-decoration: underline;
+        cursor: pointer;
     }
 </style>

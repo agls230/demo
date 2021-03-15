@@ -6,24 +6,15 @@ Vue.use(require('vue-cookies'))
 
 export default new Vuex.Store({
     state: {
+        comment: {
+            id: localStorage.getItem('saveId') ? localStorage.getItem('saveId') : '',
+            type: localStorage.getItem('saveType') ? localStorage.getItem('saveType') : ''
+        }
         // // token
         // token: localStorage.getItem('token') ? localStorage.getItem('token') : '',
         // // cookie
         // cookie: this.$cookies.get('login') ? this.$cookies.get('login') : '',
-        // 用户信息
-        userInfo: {
-            id: '',
-            username: '',
-            password: '',
-            email: '',
-            realName: '',
-            isUsed: '',
-            isLocked: '',
-            userExpired: '',
-            certificateExpired: '',
-            createTime: '',
-            lastTime: ''
-        }
+
     },
     mutations: {
         // // 携带token信息并更新本地token
@@ -37,8 +28,10 @@ export default new Vuex.Store({
         //     this.$cookies.set('login', newer, '1d')
         // },
         // 更新用户信息
-        changeUserInfo(state, newer) {
-            state.userInfo = newer
+        changeComment(state, newer) {
+            state.comment = newer
+            localStorage.setItem('saveId', newer.id)
+            localStorage.setItem('saveType', newer.type)
         }
     },
     actions: {},

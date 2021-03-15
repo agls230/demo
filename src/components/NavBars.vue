@@ -14,7 +14,7 @@
                         <a class="nav-link" @click="indexPage">首页推荐</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" @click="classifyPage">店铺浏览</a>
+                        <a class="nav-link" @click="classifyPage">分类浏览</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" @click="team">组队大厅</a>
@@ -40,6 +40,10 @@
                             <a class="dropdown-item">导航3</a>
                         </div>
                     </li>
+                    <!--商家入口-->
+                    <li class="nav-item">
+                        <a class="nav-link" @click="shopPage">我是商家</a>
+                    </li>
                     <!--                后台入口-->
                     <!--                后台入口-->
                     <!--                后台入口-->
@@ -52,6 +56,7 @@
                             <a class="dropdown-item" @click="toRole">角色管理</a>
                             <a class="dropdown-item" @click="toPre">权限管理</a>
                             <a class="dropdown-item" @click="toShop">商铺管理</a>
+                            <a class="dropdown-item" @click="toShopping">商品管理</a>
                         </div>
                     </li>
                     <li class="nav-item d-none d-md-block">
@@ -104,11 +109,15 @@
             },
             // 跳转分类页
             classifyPage() {
-                this.$router.push('/shop')
+                this.$router.push('/classify')
             },
             // 跳转组队页
             team() {
                 this.$router.push('/team')
+            },
+            // 跳转商家页
+            shopPage() {
+                this.$router.push('/shopPage')
             },
             // 跳转用户管理
             toUser() {
@@ -125,6 +134,10 @@
             // 跳转商铺管理
             toShop() {
                 this.$router.push('/backstage/shopManagement')
+            },
+            // 跳转商品管理
+            toShopping() {
+                this.$router.push('/backstage/shoppingManagement')
             },
             // 显示搜索
             showSe() {

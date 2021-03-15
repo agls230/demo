@@ -9,9 +9,13 @@ const Login = () => import('../views/Login')
 // 首页
 const Index = () => import('../views/Index')
 // 分类页
-const Shop = () => import('../views/Shop')
+const Classify = () => import('../views/Classify')
+// 店铺详情页
+const ShopDetail = () => import('../views/ShopDetail')
 // 组队页
 const Team = () => import('../views/Team')
+// 商家页
+const ShopPage = () => import('../views/ShopPage')
 // 个人信息页
 const ProFile = () => import('../views/ProFile')
 // 后台用户页
@@ -32,8 +36,10 @@ const RoleToPer = () => import('../views/RoleToPer')
 const Permission = () => import('../views/Permission')
 // 后台权限修改页
 const PermissionUpdate = () => import('../views/PermissionUpdate')
-// 后台权限修改页
+// 后台商户修改页
 const ShopManagement = () => import('../views/ShopManagement')
+// 后台商品权限修改页
+const ShoppingManagement = () => import('../views/ShoppingManagement')
 
 
 Vue.use(VueRouter)
@@ -64,14 +70,24 @@ const routes = [
         component: ProFile
     },
     {
-        path: '/shop',
-        name: 'Shop',
-        component: Shop
+        path: '/classify',
+        name: 'Classify',
+        component: Classify
+    },
+    {
+        path: '/shopDetail',
+        name: 'ShopDetail',
+        component: ShopDetail
     },
     {
         path: '/team',
         name: 'Team',
         component: Team
+    },
+    {
+        path: '/shopPage',
+        name: 'ShopPage',
+        component: ShopPage
     },
     {
         path: '/backstage/user',
@@ -122,6 +138,11 @@ const routes = [
         path: '/backstage/shopManagement',
         name: 'ShopManagement',
         component: ShopManagement
+    },
+    {
+        path: '/backstage/shoppingManagement',
+        name: 'ShoppingManagement',
+        component: ShoppingManagement
     },
 ]
 
