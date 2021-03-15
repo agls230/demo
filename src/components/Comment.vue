@@ -6,6 +6,12 @@
                 <div class="d-inline-block w-25"><i class="bi-star-fill text-warning"></i>{{list.star}}
                 </div>
                 <div class="text-secondary small">评论：{{list.content}}</div>
+                <div class="comIndex" id="commentReText">
+                    <span class="small more" @click.once="commentNext(index)">查看更多<i
+                            class="bi bi-chevron-compact-down"></i></span>&nbsp;&nbsp;
+                    <span class="small more" @click="commentRe(index)">回复</span>
+                </div>
+
                 <hr>
             </div>
         </div>
@@ -59,7 +65,10 @@
                 sub: '',
                 star: '',
                 con: '',
-                allInfo: []
+                allInfo: [],
+                comments: false,
+                commentIndex: 0,
+                commRe: [],
             }
         },
         methods: {
@@ -80,7 +89,7 @@
                             resolve(res)
                         })
                     }).then(res => {
-                        console.log(res.data)
+                        // console.log(res.data)
                         this.allInfo = res.data.evaluations
                     })
                 } else if (this.type === 'commodity') {
@@ -95,24 +104,9 @@
                             resolve(res)
                         })
                     }).then(res => {
-                        console.log(res.data)
-                    })
-                } else if (this.type === 'evaluation') {
-                    new Promise((resolve, reject) => {
-                        request({
-                            method: 'post',
-                            params: {
-                                sid: this.id
-                            },
-                            url: '/evaluation/findEvaluationByCommodity'
-                        }).then(res => {
-                            resolve(res)
-                        })
-                    }).then(res => {
-                        console.log(res.data)
+                        // console.log(res.data)
                     })
                 }
-
             },
             addComment() {
                 const commentShow = this.$refs.commentShow
@@ -132,37 +126,114 @@
                 commentShow.style.transition = 'all ease 0.3s'
                 tip.style.display = 'block'
                 if (this.sub && this.star < 6 && this.con) {
-                    new Promise((resolve, reject) => {
-                        request({
-                            method: 'post',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            data: JSON.stringify({
-                                id: this.id,
-                                type: this.type,
-                                evaluationDto: {
-                                    subject: this.sub,
-                                    star: this.star,
-                                    content: this.con
-                                }
-                            }),
-                            url: '/evaluation/create'
+                    if (this.comments === false) {
+                        new Promise((resolve, reject) => {
+                            request({
+                                method: 'post',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                data: JSON.stringify({
+                                    id: this.id,
+                                    type: this.type,
+                                    evaluationDto: {
+                                        subject: this.sub,
+                                        star: this.star,
+                                        content: this.con
+                                    }
+                                }),
+                                url: '/evaluation/create'
+                            }).then(res => {
+                                resolve(res)
+                            })
                         }).then(res => {
-                            resolve(res)
+                            if (res.data.res === 'ok') {
+                                success('发布成功。')
+                                this.init()
+                            } else {
+                                error('发布失败。')
+                            }
                         })
-                    }).then(res => {
-                        if (res.data.res === 'ok') {
-                            success('发布成功。')
-                            this.init()
-                        } else {
-                            error('发布失败。')
-                        }
-                    })
+                    } else {
+                        new Promise((resolve, reject) => {
+                            request({
+                                method: 'post',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                data: JSON.stringify({
+                                    id: this.commentIndex,
+                                    type: 'evaluation',
+                                    evaluationDto: {
+                                        subject: this.sub,
+                                        star: this.star,
+                                        content: this.con
+                                    }
+                                }),
+                                url: '/evaluation/create'
+                            }).then(res => {
+                                resolve(res)
+                            })
+                        }).then(res => {
+                            // console.log(res.data)
+                            if (res.data.res === 'ok') {
+                                success('回复成功。')
+                                this.init()
+                            } else {
+                                error('回复失败。')
+                            }
+                        })
+                        this.comments = false
+                    }
                 }
             },
-            // const _this = this
-            // _this.changeComment({id: this.allShop[index].id, type: 'shop'})
+
+            commentNext(index) {
+                new Promise((resolve, reject) => {
+                    request({
+                        method: 'post',
+                        params: {
+                            eid: this.allInfo[index].id
+                        },
+                        url: '/evaluation/findEvaluationByEvaluation'
+                    }).then(res => {
+                        resolve(res)
+                    })
+                }).then(res => {
+                    // console.log(res.data)
+                    if (res.data.res === 'ok') {
+                        this.commRe = res.data.evaluations
+                        const elements = Array.from(document.getElementsByClassName('comIndex'));
+                        const that = elements[index];
+
+                        for (let i = 0; i < this.commRe.length; i++) {
+                            const divName = document.createElement('div')
+                            divName.style.color = '#6c757d'
+                            divName.style.fontSize = '13px'
+                            divName.style.marginLeft = '30px'
+                            const nodeName = document.createTextNode('标题：' + this.commRe[i].subject)
+                            divName.appendChild(nodeName)
+                            that.appendChild(divName)
+
+                            const divCon = document.createElement('div')
+                            divCon.style.color = '#6c757d'
+                            divCon.style.fontSize = '13px'
+                            divCon.style.marginLeft = '30px'
+                            const nodeCon = document.createTextNode('内容：' + this.commRe[i].content)
+                            divCon.appendChild(nodeCon)
+                            that.appendChild(divCon)
+
+                            const hr = document.createElement('hr')
+                            that.appendChild(hr)
+                        }
+                    }
+                })
+            },
+            commentRe(index) {
+                this.addComment()
+                this.comments = true
+                this.commentIndex = this.allInfo[index].id
+            }
         },
         mounted() {
             this.init()
@@ -178,5 +249,10 @@
 
     ::-webkit-scrollbar {
         display: none;
+    }
+
+    .more:hover {
+        color: #007bff;
+        cursor: pointer;
     }
 </style>

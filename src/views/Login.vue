@@ -35,7 +35,7 @@
             }
         },
         methods: {
-            ...mapMutations(["changeCookie"]),
+            ...mapMutations(["changeToken"]),
             // 跳转注册
             toReg() {
                 this.$router.push('/register')
@@ -59,8 +59,10 @@
                 }).then(res => {
                     if (res.data.res === 'ok') {
                         success('登陆成功。')
-                        // 写入cookie
-                        this.$cookies.set('login', this.username, '1d')
+                        // // 写入cookie
+                        // this.$cookies.set('login', this.username, '1d')
+                        const _this = this
+                        _this.changeToken(this.username)
                         // 登陆成功后跳转到来的页面或回到首页
                         this.$router.replace(this.$route.params.redirect || '/')
                     } else {

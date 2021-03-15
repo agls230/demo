@@ -104,7 +104,7 @@
                             resolve(res)
                         })
                     }).then(res => {
-                        console.log(res.data.shop)
+                        // console.log(res.data.shop)
                         this.shop.name = res.data.shop.name
                         this.shop.star = res.data.shop.star
                         this.shop.content = res.data.shop.content

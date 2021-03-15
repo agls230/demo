@@ -1,10 +1,10 @@
-const webpack =require('webpack')
+const webpack = require('webpack')
 
 module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://100.82.65.183:8080/',
+                target: 'http://localhost:8080/',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': ''

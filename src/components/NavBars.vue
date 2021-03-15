@@ -68,7 +68,7 @@
                 <div class="d-flex">
                     <!--            登录头像-->
                     <div class="img mr-3 ml-3">
-                        <img :src="img" alt="" style="width:100%;height: 100%" @click="toProFile">
+                        <img :src="img" alt="" style="width:100%;height: 100%">
                     </div>
                     <!--登录注册-->
                     <div :class="{'logSuccess':logSuccess}" ref="logSuccess" @click.self="ProFile">
@@ -82,9 +82,9 @@
         <!--        弹出搜索框-->
         <div class="d-none d-md-block col-md-5 position-relative se" :class="{'seStyle':seStyle}">
             <div class="input-group position-relative ses">
-                <input type="text" class="form-control" placeholder="搜索">
+                <input type="text" class="form-control" v-model="seCon">
                 <div class="input-group-append">
-                    <button class="btn btn-success" type="submit">Go</button>
+                    <button class="btn btn-success" type="button" @click="searchCon">Go</button>
                 </div>
             </div>
         </div>
@@ -92,6 +92,8 @@
 </template>
 
 <script>
+    import {request} from "../network/request";
+
     export default {
         name: "NavBars",
         data() {
@@ -99,7 +101,12 @@
                 logSuccess: false,
                 img: '',
                 seStyle: false,
-                i: 0
+                i: 0,
+                seCon: '',
+                seInfo: {
+                    shop: '',
+                    shopping: ''
+                }
             }
         },
         methods: {
@@ -149,6 +156,30 @@
                     this.i++
                 }
             },
+            // 搜索
+            searchCon() {
+                new Promise((resolve, reject) => {
+                    request({
+                        method: 'get',
+                        url: '/search/' + this.seCon
+                    }).then(res => {
+                        resolve(res)
+                    }).catch(err => {
+                        reject(err)
+                    })
+                }).then(res => {
+                    console.log(res.data)
+                    if (res.data.commodities.length === 0 && res.data.shops.length === 0) {
+                        this.seInfo.shop = -1
+                    } else {
+                        this.seInfo.shop = res.data.shops
+                        this.seInfo.shopping = res.data.commodities
+                    }
+                    this.$bus.$emit('seInfo', this.seInfo)
+                }).catch(err => {
+                    console.log(err)
+                })
+            },
             // 跳转登录
             toLog() {
                 this.$router.push({
@@ -172,7 +203,13 @@
             // 模拟传值，登陆成功
             // this.$refs.logSuccess.innerHTML = 'admin'
             // this.logSuccess = true
-            this.img = 'https://static.runoob.com/images/mix/bird.jpg'
+
+            const token = localStorage.getItem('token')
+            if (token) {
+                this.$refs.logSuccess.innerHTML = '欢迎：' + token
+                this.img = 'https://static.runoob.com/images/mix/bird.jpg'
+                this.logSuccess = true
+            }
         }
     }
 </script>

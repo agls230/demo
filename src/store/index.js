@@ -9,19 +9,19 @@ export default new Vuex.Store({
         comment: {
             id: localStorage.getItem('saveId') ? localStorage.getItem('saveId') : '',
             type: localStorage.getItem('saveType') ? localStorage.getItem('saveType') : ''
-        }
-        // // token
-        // token: localStorage.getItem('token') ? localStorage.getItem('token') : '',
+        },
+        // token
+        token: localStorage.getItem('token') ? localStorage.getItem('token') : '',
         // // cookie
         // cookie: this.$cookies.get('login') ? this.$cookies.get('login') : '',
 
     },
     mutations: {
-        // // 携带token信息并更新本地token
-        // changeToken(state, newer) {
-        //     state.token = newer
-        //     localStorage.setItem('token', newer)
-        // },
+        // 携带token信息并更新本地token
+        changeToken(state, newer) {
+            state.token = newer
+            localStorage.setItem('token', newer)
+        },
         // // 携带cookie信息并更新本地cookie
         // changeCookie(state, newer) {
         //     state.cookie = newer

@@ -37,8 +37,9 @@
                 </div>
             </div>
         </div>
-        <div class="mb-3">
-            <h5>推荐店铺</h5>
+        <h5 ref="tip" class="text-danger m-3"></h5>
+        <div class="mb-3 shadow">
+            <h5 ref="shopText"></h5>
             <hr>
             <div class="row no-gutters">
                 <div class="col-3 col-md-1 m-3 con" v-for="(list,index) in allShop">
@@ -55,8 +56,8 @@
             </div>
         </div>
 
-        <div>
-            <h5>推荐商品</h5>
+        <div class="shadow mb-3">
+            <h5 ref="shoppingText"></h5>
             <hr>
             <div class="row no-gutters">
                 <div class="col-3 col-md-1 m-3 con" v-for="(list,index) in allShopping">
@@ -93,7 +94,7 @@
         data() {
             return {
                 allShop: [],
-                allShopping: [],
+                allShopping: []
             }
         },
         methods: {
@@ -109,6 +110,8 @@
             }
         },
         mounted() {
+            this.$refs.shopText.innerHTML = '推荐店铺'
+            this.$refs.shoppingText.innerHTML = '推荐店品'
             // 商铺
             new Promise((resolve, reject) => {
                 request({
@@ -134,6 +137,24 @@
             }).then(res => {
                 this.allShopping = []
                 this.allShopping = res.data.commodityDtoSet
+            })
+            this.$bus.$on('seInfo', data => {
+                if (data.shop === -1) {
+                    this.$refs.tip.innerHTML = '搜索到如下信息：'
+                    this.$refs.shopText.innerHTML = '搜索店铺'
+                    this.$refs.shoppingText.innerHTML = '搜索商品'
+                    this.allShop = []
+                    this.allShopping = []
+                } else {
+                    this.$refs.tip.innerHTML = '搜索到如下信息：'
+                    this.$refs.shopText.innerHTML = '搜索店铺'
+                    this.$refs.shoppingText.innerHTML = '搜索商品'
+                    this.allShop = []
+                    this.allShopping = []
+                    this.allShop = data.shop
+                    this.allShopping = data.shopping
+                }
+                // console.log(data.shop)
             })
         }
     }
