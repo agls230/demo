@@ -57,6 +57,7 @@
                         reject(err)
                     })
                 }).then(res => {
+                    console.log(res)
                     if (res.data.res === 'ok') {
                         success('登陆成功。')
                         // // 写入cookie

@@ -2,7 +2,7 @@
     <div class="">
         <nav class="col-12 col-md-12 navbar navbar-expand-md bg-primary navbar-dark">
             <!--            logo-->
-            <a class="navbar-brand col-md-1 col-4 d-none d-md-block" href="/">文字Logo</a>
+            <a class="navbar-brand col-md-1 col-4 d-none d-md-block" href="/">平台Logo</a>
             <!--            小屏显示按钮-->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
