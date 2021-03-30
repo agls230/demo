@@ -57,7 +57,13 @@
                 <div class="w-100 mb-3">
                     <p><i class="bi bi-grid-fill text-danger"></i>店铺模型</p>
                     <hr>
-                    <div class="h3 text-secondary text-center">正在施工中，请关注2.0版本</div>
+                    <model/>
+                </div>
+
+                <div class="w-100 mb-3">
+                    <p><i class="bi bi-geo-fill text-danger"></i>地理位置</p>
+                    <hr>
+                    <maps/>
                 </div>
 
                 <div class="w-100 mb-3">
@@ -174,10 +180,12 @@
     import ToTop from "../components/ToTop";
     import {request} from "../network/request";
     import {error, success, tip} from "../util/promptBox";
+    import Model from "../components/Model";
+    import Maps from "../components/Maps";
 
     export default {
         name: "shopPage",
-        components: {ToTop, Foot, NavBars},
+        components: {Model, ToTop, Foot, NavBars, Maps},
         data() {
             return {
                 allInfo: [],
@@ -434,6 +442,7 @@
         },
         mounted() {
             this.init()
+            this.$bus.$emit('pageType', {type: 'business'})
         }
     }
 </script>

@@ -15,7 +15,7 @@ module.exports = {
     configureWebpack: {
         plugins: [
             new webpack.ProvidePlugin({
-                $: "jquery",
+                // $: "jquery",
                 jQuery: "jquery",
                 jquery: "jquery",
                 "windows.jQuery": "jquery"
