@@ -107,6 +107,15 @@
                 })
                 const _this = this
                 _this.changeComment({id: this.allShop[index].id, type: 'shop'})
+            },
+            // 跳转到商店详情页
+            detailShopping(index) {
+                this.$router.push({
+                    path: '/shopDetail',
+                    query: {shopId: this.allShop[index].id}
+                })
+                const _this = this
+                _this.changeComment({id: this.allShop[index].id, type: 'shop'})
             }
         },
         mounted() {
@@ -121,6 +130,7 @@
                     resolve(res)
                 })
             }).then(res => {
+                console.log(res)
                 this.allShop = []
                 this.allShop = res.data.shops
             })

@@ -132,15 +132,15 @@
                     },
                     url: '/user/findUserByUsername'
                 }).then(res => {
-                    // console.log(res.data)
-                    this.id = res.data.id
-                    this.name = res.data.username
-                    this.email = res.data.email
-                    this.realName = res.data.realName
-                    this.used = res.data.used ? "是" : "否"
-                    this.locked = res.data.locked ? "否" : "是"
-                    this.userExpired = res.data.userExpired ? "否" : "是"
-                    this.certificateExpired = res.data.certificateExpired ? "否" : "是"
+                    // console.log(res.data.user)
+                    this.id = res.data.user.id
+                    this.name = res.data.user.username
+                    this.email = res.data.user.email
+                    this.realName = res.data.user.realName
+                    this.used = res.data.user.used ? "是" : "否"
+                    this.locked = res.data.user.locked ? "否" : "是"
+                    this.userExpired = res.data.user.userExpired ? "否" : "是"
+                    this.certificateExpired = res.data.user.certificateExpired ? "否" : "是"
                 })
             },
             // 修改弹窗
@@ -165,7 +165,7 @@
                         },
                         url: '/user/simple/changeUser'
                     }).then(res => {
-                        // console.log(res.data)
+                        console.log(res.data)
                         if (res.data.res === 'ok') {
                             success()
                             localStorage.setItem('token', this.shop.used)
@@ -176,6 +176,7 @@
                     tip('信息填写不完整。')
                 }
             },
+            // 退出登录
             exit() {
                 request({
                     method: 'get',
@@ -184,6 +185,7 @@
                     if (res.data.res === 'logoutSucceed') {
                         success('退出成功。')
                         localStorage.removeItem('token')
+                        localStorage.removeItem('role')
                         this.$router.push('/login')
                     }
                 })
@@ -191,6 +193,7 @@
         },
         mounted() {
             this.init()
+            console.log(this.id)
         }
     }
 </script>

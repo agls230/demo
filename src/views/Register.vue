@@ -1,6 +1,6 @@
 <template>
     <div>
-<!--        <button @click="zzz">sss</button>-->
+        <button @click="zzz">sss</button>
         <div class="position-absolute col-12 log">
             <div class="col-10 offset-1 col-md-4 offset-md-4 reg">
                 <div class="transY" ref="transY">
@@ -156,9 +156,9 @@
                 }
             },
             // 测试按钮
-            // zzz() {
-            //     this.transY()
-            // }
+            zzz() {
+                this.transY()
+            }
         }
     }
 </script>

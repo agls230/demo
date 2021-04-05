@@ -147,6 +147,7 @@
                                 resolve(res)
                             })
                         }).then(res => {
+                            console.log(res)
                             if (res.data.res === 'ok') {
                                 success('发布成功。')
                                 this.init()

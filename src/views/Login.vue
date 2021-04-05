@@ -31,11 +31,12 @@
             return {
                 username: '',
                 password: '',
-                rememberMe: ''
+                rememberMe: '',
+                role: []
             }
         },
         methods: {
-            ...mapMutations(["changeToken"]),
+            ...mapMutations(["changeToken", "changeRole", "changeUserId"]),
             // 跳转注册
             toReg() {
                 this.$router.push('/register')
@@ -57,15 +58,30 @@
                         reject(err)
                     })
                 }).then(res => {
-                    console.log(res)
                     if (res.data.res === 'ok') {
                         success('登陆成功。')
                         // // 写入cookie
                         // this.$cookies.set('login', this.username, '1d')
                         const _this = this
                         _this.changeToken(this.username)
-                        // 登陆成功后跳转到来的页面或回到首页
-                        this.$router.replace(this.$route.params.redirect || '/')
+                        // 登陆成功后查询登陆者的身份角色
+                        request({
+                            method: 'post',
+                            params: {
+                                name: localStorage.getItem('token')
+                            },
+                            url: '/user/findUserByUsername'
+                        }).then(res => {
+                            console.log(res.data)
+                            for (let i = 0; i < res.data.roles.length; i++) {
+                                this.role.push(res.data.roles[i].name)
+                            }
+                            const _this = this
+                            _this.changeRole(this.role)
+                            _this.changeUserId(res.data.user.id)
+                            // 登陆成功后跳转到来的页面或回到首页
+                            this.$router.replace(this.$route.params.redirect || '/')
+                        })
                     } else {
                         this.$refs.logTip.innerHTML = res.data.res
                     }

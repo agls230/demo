@@ -111,6 +111,12 @@
                 // }).catch(err => {
                 //     error('加载错误，请刷新重试。')
                 // })
+                this.$router.push({
+                    path: '/shopDetail',
+                    query: {shopId: 1}
+                })
+                const _this = this
+                _this.changeComment({id: 1, type: 'shop'})
             },
             // 商品详情页
             detailShop(index) {

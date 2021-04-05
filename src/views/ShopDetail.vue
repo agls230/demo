@@ -52,12 +52,12 @@
                 </div>
             </div>
             <!--模型-->
-            <div class="clo-12 col-md-10 offset-md-1 mt-3 shadow-sm bg-light" style="height: 200px">
+            <div class="clo-12 col-md-10 offset-md-1 mt-3 shadow-sm bg-light" style="height: auto">
                 <div class="ml-3 mt-3 effect"><i class="bi-border-outer"></i> 店铺布局</div>
                 <hr>
-                <div class="h3 text-secondary text-center">正在施工中，请关注2.0版本</div>
+                <model/>
             </div>
-            
+
             <div class="clo-12 col-md-10 offset-md-1 mt-3 bg-light shadow-sm">
                 <div class="ml-3 mt-3 effect"><i class="bi-chat-square-text"></i> 店铺评论</div>
                 <hr>
@@ -75,10 +75,11 @@
     import ToTop from "../components/ToTop";
     import {request} from "../network/request";
     import Comment from "../components/Comment";
+    import Model from "../components/Model";
 
     export default {
         name: "ShopDetail",
-        components: {Comment, ToTop, Foot, NavBars},
+        components: {Model, Comment, ToTop, Foot, NavBars},
         data() {
             return {
                 shopId: '',
@@ -114,6 +115,7 @@
         },
         mounted() {
             this.shopId = this.$route.query.shopId
+            this.$bus.$emit('modelType', {type: 'show'})
             this.init()
         }
     }
@@ -134,7 +136,8 @@
         cursor: pointer;
         color: #dc3545;
     }
-    .bg div{
+
+    .bg div {
         /*background-color: rgb(240,240,240);*/
     }
 </style>

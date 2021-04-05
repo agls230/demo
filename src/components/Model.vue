@@ -5,7 +5,7 @@
             <!--        模型操作层-->
             <div class="row no-gutters  ">
                 <!--        模型块-->
-                <div class="col-12 col-md-1 border">
+                <div class="col-12 col-md-1 border" ref="blo">
                     <h6>模型块:</h6>
                     <div id="myPaletteSmall" style="width: 100%; height: 70px"></div>
                 </div>
@@ -18,7 +18,7 @@
             <div class="position-absolute mask" id="mask"></div>
         </div>
         <!--        提交修改按钮-->
-        <div class="text-right mt-3">
+        <div class="text-right mt-3" ref="opt">
             <button class="btn btn-sm btn-danger mr-1" id="clearModelInfo">清除</button>
             <button class="btn btn-sm btn-warning mr-1" id="resetModelInfo">重置</button>
             <button class="btn btn-sm btn-primary mr-1" id="updateModelInfo">修改</button>
@@ -29,6 +29,8 @@
 
 <script>
     import go from 'gojs'
+    import {request} from "../network/request";
+    import {error, success} from "../util/promptBox";
 
     const AllowTopLevel = false
     const $ = go.GraphObject.make
@@ -38,7 +40,8 @@
         data() {
             return {
                 modelInfo: '',
-                modelInfoBackup: ''
+                modelInfoBackup: '',
+                shopId: '1'
             }
         },
         methods: {
@@ -232,10 +235,10 @@
                             groupTemplate: myDiagram.groupTemplate
                         });
 
-                const desk = '#DCDCDC';
-                const chair = '#DCDCDC';
-                const cabinet = '#DCDCDC';
-                const door = '#DCDCDC';
+                const desk = '#87CEFA';
+                const chair = '#90EE90';
+                const cabinet = '#808080';
+                const door = '#FFDEAD';
 
                 // 指定面板的内容
                 myPaletteSmall.model = new go.GraphLinksModel([
@@ -266,18 +269,26 @@
                     localStorage.removeItem('modelInfo')
                     localStorage.setItem('modelInfo', myDiagram.model.toJson())
                     document.getElementById('mask').style.display = 'block'
-                    // request({
-                    //     method:'get',
-                    //     url: '',
-                    //     params: {
-                    //         model: localStorage.getItem('modelInfo')
-                    //     },
-                    // }).then(res => {
-                    //     console.log(res.data)
-                    // }).catch(err => {
-                    //     console.log(err)
-                    //     error()
-                    // })
+                    request({
+                        method: 'post',
+                        url: '/build/saveOne',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: JSON.stringify({
+                            "sid": 1,
+                            "build": {
+                                "id": 1,
+                                "text": localStorage.getItem('modelInfo')
+                            }
+                        })
+                    }).then(res => {
+                        console.log(res.data)
+                        success()
+                    }).catch(err => {
+                        console.log(err)
+                        error()
+                    })
                 })
             },
             // 初始时请求布局数据
@@ -293,25 +304,39 @@
                 //         console.log(err)
                 //         error()
                 //     })
-                modelInfo = `{
-                    "class": "GraphLinksModel",
-                    "nodeDataArray": [
-                        {"key": "G1", "isGroup": true, "pos": "0 -80", "size": "400 400"},
-                        {"key": "柜", "color": "#DCDCDC", "pos": "140 0", "group": "G1", "size": "200 20"},
-                        {"key": "门", "color": "#DCDCDC", "pos": "260 300", "group": "G1", "size": "100 20"},
-                        {"key": "柜2", "color": "#DCDCDC", "pos": "340 20", "group": "G1", "size": "20 160"},
-                        {"key": "椅", "color": "#DCDCDC", "pos": "160 40", "group": "G1", "size": "20 20"},
-                        {"key": "桌", "color": "#DCDCDC", "pos": "160 60", "group": "G1", "size": "40 20"},
-                        {"key": "桌2", "color": "#DCDCDC", "pos": "220 60", "group": "G1", "size": "40 20"}
-                    ],
-                    "linkDataArray": []
-                }`
+                modelInfo = `{ "class": "GraphLinksModel",
+  "nodeDataArray": [
+{"key":"G1", "isGroup":true, "pos":"-40 -20", "size":"400 400"},
+{"key":"门", "color":"#FFDEAD", "pos":"40 360", "group":"G1", "size":"260 20"},
+{"key":"柜", "color":"#808080", "pos":"20 240", "group":"G1", "size":"20 140"},
+{"key":"桌", "color":"#87CEFA", "pos":"60 40", "group":"G1", "size":"60 60"},
+{"key":"椅", "color":"#90EE90", "pos":"20 20", "group":"G1"},
+{"key":"椅2", "color":"#90EE90", "pos":"20 60", "group":"G1"},
+{"key":"椅3", "color":"#90EE90", "pos":"20 100", "group":"G1"},
+{"key":"椅4", "color":"#90EE90", "pos":"60 120", "group":"G1"},
+{"key":"椅5", "color":"#90EE90", "pos":"100 120", "group":"G1"},
+{"key":"椅6", "color":"#90EE90", "pos":"60 0", "group":"G1"},
+{"key":"椅7", "color":"#90EE90", "pos":"100 0", "group":"G1"},
+{"key":"椅8", "color":"#90EE90", "pos":"140 20", "group":"G1"},
+{"key":"椅9", "color":"#90EE90", "pos":"140 60", "group":"G1"},
+{"key":"椅10", "color":"#90EE90", "pos":"140 100", "group":"G1"}
+ ],
+  "linkDataArray": []}`
                 localStorage.setItem('modelInfo', modelInfo)
             }
         },
         mounted() {
             this.initialModelInfo()
             this.init()
+            this.$bus.$on('modelType', data => {
+                if (data.type === 'show') {
+                    this.$refs.blo.style.display = 'none'
+                    this.$refs.opt.style.display = 'none'
+                } else if (data.type === 'opt') {
+                    // this.$refs.blo.style.display = 'none'
+                    // this.$refs.opt.style.display = 'none'
+                }
+            })
         }
     }
 </script>

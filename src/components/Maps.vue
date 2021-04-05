@@ -52,7 +52,7 @@
                     lat: 39.915
                 },
                 zoom: 15,
-                
+
                 dragging: true,
                 // 用户点击的标记点的经纬度
                 clickPoint: {
@@ -68,6 +68,7 @@
                 pageLocation: '',
                 // 在哪一个页面的文本？商家修改页/用户组队页
                 pageLocationText: '',
+                shopId: 1
             }
         },
         methods: {
@@ -111,7 +112,8 @@
                     request({
                         method: 'post',
                         url: '',
-                        params: {}
+                        params: {
+                        }
                     }).then(res => {
                         console.log(res.data)
                     }).catch(err => {

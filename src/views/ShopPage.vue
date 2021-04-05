@@ -192,7 +192,7 @@
                 shopInfo: '',
                 updInfo: '修改',
                 switch: true,
-                shopId: 11,
+                shopId: 1,
                 upd: false,
                 state: false,
                 add: false,
@@ -443,6 +443,7 @@
         mounted() {
             this.init()
             this.$bus.$emit('pageType', {type: 'business'})
+            this.$bus.$emit('modelType', {type: 'opt'})
         }
     }
 </script>
@@ -463,7 +464,7 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        z-index: 11;
+        z-index: 9999;
         border-radius: 5px;
     }
 
@@ -476,7 +477,7 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        z-index: 10;
+        z-index: 9999;
         border-radius: 5px;
     }
 

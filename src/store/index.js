@@ -14,7 +14,9 @@ export default new Vuex.Store({
         token: localStorage.getItem('token') ? localStorage.getItem('token') : '',
         // // cookie
         // cookie: this.$cookies.get('login') ? this.$cookies.get('login') : '',
-
+        // role
+        role: localStorage.getItem('role') ? localStorage.getItem('role') : '',
+        userId: localStorage.getItem('userId') ? localStorage.getItem('userId') : '',
     },
     mutations: {
         // 携带token信息并更新本地token
@@ -32,6 +34,16 @@ export default new Vuex.Store({
             state.comment = newer
             localStorage.setItem('saveId', newer.id)
             localStorage.setItem('saveType', newer.type)
+        },
+        // 更改角色
+        changeRole(state, newer) {
+            state.role = newer
+            localStorage.setItem('role', newer)
+        },
+        // 更改登陆者的id
+        changeUserId(state, newer) {
+            state.userId = newer
+            localStorage.setItem('userId', newer)
         }
     },
     actions: {},

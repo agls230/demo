@@ -41,13 +41,13 @@
                         </div>
                     </li>
                     <!--商家入口-->
-                    <li class="nav-item">
+                    <li class="nav-item" ref="shop" style="display: none">
                         <a class="nav-link" @click="shopPage">我是商家</a>
                     </li>
                     <!--                后台入口-->
                     <!--                后台入口-->
                     <!--                后台入口-->
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" ref="super" style="display: none">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown">
                             后台管理
                         </a>
@@ -106,7 +106,8 @@
                 seInfo: {
                     shop: '',
                     shopping: ''
-                }
+                },
+                loginRole: ''
             }
         },
         methods: {
@@ -209,6 +210,34 @@
                 this.$refs.logSuccess.innerHTML = '欢迎：' + token
                 this.img = 'https://static.runoob.com/images/mix/bird.jpg'
                 this.logSuccess = true
+            }
+
+            // 根据登录的用户角色显示菜单栏
+            this.loginRole = localStorage.getItem('role')
+            switch (this.loginRole.length) {
+                // super超管
+                case 5:
+                    this.$refs.super.style.display = 'block'
+                    break
+                case 12:
+                    this.$refs.super.style.display = 'block'
+                    break
+                // shopkeeper商家
+                case 10:
+                    this.$refs.shop.style.display = 'block'
+                    break
+                case 17:
+                    this.$refs.shop.style.display = 'block'
+                    break
+                // shopkeeper商家,super超管
+                case 16:
+                    this.$refs.shop.style.display = 'block'
+                    this.$refs.super.style.display = 'block'
+                    break
+                case 23:
+                    this.$refs.shop.style.display = 'block'
+                    this.$refs.super.style.display = 'block'
+                    break
             }
         }
     }

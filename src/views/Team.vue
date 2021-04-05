@@ -141,7 +141,7 @@
             return {
                 allTeam: [],
                 myTeam: [],
-                userId: 1,
+                userId: localStorage.getItem('userId'),
                 dis: false,
                 upd: false,
                 state: false,
