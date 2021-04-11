@@ -30,7 +30,7 @@
         </div>
         <div>
         </div>
-        <foot class="foot"></foot>
+<!--        <foot class="foot"></foot>-->
         <to-top/>
     </div>
 </template>

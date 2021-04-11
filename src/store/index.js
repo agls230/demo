@@ -10,16 +10,19 @@ export default new Vuex.Store({
             id: localStorage.getItem('saveId') ? localStorage.getItem('saveId') : '',
             type: localStorage.getItem('saveType') ? localStorage.getItem('saveType') : ''
         },
-        // token
+        // 用户名
         token: localStorage.getItem('token') ? localStorage.getItem('token') : '',
         // // cookie
         // cookie: this.$cookies.get('login') ? this.$cookies.get('login') : '',
-        // role
+        // 用户身份
         role: localStorage.getItem('role') ? localStorage.getItem('role') : '',
+        // 用户id
         userId: localStorage.getItem('userId') ? localStorage.getItem('userId') : '',
+        // 商铺id
+        shopId: localStorage.getItem('shopId') ? localStorage.getItem('shopId') : '',
     },
     mutations: {
-        // 携带token信息并更新本地token
+        // 携带并更新本地用户名
         changeToken(state, newer) {
             state.token = newer
             localStorage.setItem('token', newer)
@@ -44,6 +47,11 @@ export default new Vuex.Store({
         changeUserId(state, newer) {
             state.userId = newer
             localStorage.setItem('userId', newer)
+        },
+        // 更改商铺的id
+        changeShopId(state, newer) {
+            state.shopId = newer
+            localStorage.setItem('shopId', newer)
         }
     },
     actions: {},

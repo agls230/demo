@@ -19,10 +19,10 @@
         </div>
         <!--        提交修改按钮-->
         <div class="text-right mt-3" ref="opt">
-            <button class="btn btn-sm btn-danger mr-1" id="clearModelInfo">清除</button>
-            <button class="btn btn-sm btn-warning mr-1" id="resetModelInfo">重置</button>
-            <button class="btn btn-sm btn-primary mr-1" id="updateModelInfo">修改</button>
-            <button class="btn btn-sm btn-success" id="successModelInfo">完成</button>
+            <button class="btn btn-sm btn-danger mr-1" ref="clearModelInfo">清除</button>
+            <button class="btn btn-sm btn-warning mr-1" ref="resetModelInfo">重置</button>
+            <button class="btn btn-sm btn-primary mr-1" ref="updateModelInfo">修改</button>
+            <button class="btn btn-sm btn-success" ref="successModelInfo">完成</button>
         </div>
     </div>
 </template>
@@ -34,17 +34,29 @@
 
     const AllowTopLevel = false
     const $ = go.GraphObject.make
-    let modelInfo
     export default {
         name: "Model",
-        data() {
-            return {
-                modelInfo: '',
-                modelInfoBackup: '',
-                shopId: '1'
-            }
-        },
         methods: {
+            // 初始时请求布局数据
+            initialModelInfo() {
+                localStorage.getItem('modelInfo') ? localStorage.removeItem('modelInfo') : ''
+                request({
+                    method: 'post',
+                    url: '/build/findModel',
+                    params: {
+                        sid: localStorage.getItem('shopId')
+                    },
+                }).then(res => {
+                    if (res.data.res === 'no model') {
+                        localStorage.setItem('modelInfo', 'no model')
+                    } else {
+                        localStorage.setItem('modelInfo', res.data.builds.text)
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+            },
+
             init() {
                 // 定义格子大小
                 const CellSize = new go.Size(20, 20);
@@ -60,6 +72,11 @@
                     "draggingTool.gridSnapCellSpot": go.Spot.Center,
                     "resizingTool.isGridSnapEnabled": true,
                     // 对于此样本，在页面上自动显示图模型的状态
+
+
+                    // 输出当前模型
+                    // 输出当前模型
+                    // 输出当前模型
                     "ModelChanged": function (e) {
                         if (e.isTransactionFinished) {
                             // modelInfo = myDiagram.model.toJson()
@@ -206,8 +223,13 @@
                     }
                 };
 
+
                 // 开始
-                if (modelInfo === '' || modelInfo === null) {
+                // 页面初始化时加载模型
+                // 页面初始化时加载模型
+                // 页面初始化时加载模型
+                // console.log(modelInfo)
+                if (localStorage.getItem('modelInfo') === 'no model') {
                     myDiagram.model = new go.GraphLinksModel([
                         {key: "G1", isGroup: true, pos: "0 0", size: "400 400"},
                     ])
@@ -249,23 +271,23 @@
                 ])
 
                 // 清空
-                document.getElementById('clearModelInfo').addEventListener("click", function () {
+                this.$refs.clearModelInfo.addEventListener("click", function () {
                     myDiagram.model = new go.GraphLinksModel([
                         {key: "G1", isGroup: true, pos: "0 0", size: "400 400"},
                     ])
                     document.getElementById('mask').style.display = 'none'
                 })
                 // 重置
-                document.getElementById('resetModelInfo').addEventListener("click", function () {
+                this.$refs.resetModelInfo.addEventListener("click", function () {
                     myDiagram.model = go.Model.fromJson(localStorage.getItem('modelInfo'))
                     document.getElementById('mask').style.display = 'none'
                 })
                 // 修改
-                document.getElementById('updateModelInfo').addEventListener("click", function () {
+                this.$refs.updateModelInfo.addEventListener("click", function () {
                     document.getElementById('mask').style.display = 'none'
                 })
                 // 完成
-                document.getElementById('successModelInfo').addEventListener("click", function () {
+                this.$refs.successModelInfo.addEventListener("click", function () {
                     localStorage.removeItem('modelInfo')
                     localStorage.setItem('modelInfo', myDiagram.model.toJson())
                     document.getElementById('mask').style.display = 'block'
@@ -276,9 +298,9 @@
                             'Content-Type': 'application/json'
                         },
                         data: JSON.stringify({
-                            "sid": 1,
+                            "sid": localStorage.getItem('shopId'),
                             "build": {
-                                "id": 1,
+                                // "id": 1,
                                 "text": localStorage.getItem('modelInfo')
                             }
                         })
@@ -290,53 +312,27 @@
                         error()
                     })
                 })
-            },
-            // 初始时请求布局数据
-            initialModelInfo() {
-                //     request({
-                //         method:'get',
-                //         url: '',
-                //         params: {},
-                //     }).then(res => {
-                //         console.log(res.data)
-                //         modelInfo = res.data.model
-                //     }).catch(err => {
-                //         console.log(err)
-                //         error()
-                //     })
-                modelInfo = `{ "class": "GraphLinksModel",
-  "nodeDataArray": [
-{"key":"G1", "isGroup":true, "pos":"-40 -20", "size":"400 400"},
-{"key":"门", "color":"#FFDEAD", "pos":"40 360", "group":"G1", "size":"260 20"},
-{"key":"柜", "color":"#808080", "pos":"20 240", "group":"G1", "size":"20 140"},
-{"key":"桌", "color":"#87CEFA", "pos":"60 40", "group":"G1", "size":"60 60"},
-{"key":"椅", "color":"#90EE90", "pos":"20 20", "group":"G1"},
-{"key":"椅2", "color":"#90EE90", "pos":"20 60", "group":"G1"},
-{"key":"椅3", "color":"#90EE90", "pos":"20 100", "group":"G1"},
-{"key":"椅4", "color":"#90EE90", "pos":"60 120", "group":"G1"},
-{"key":"椅5", "color":"#90EE90", "pos":"100 120", "group":"G1"},
-{"key":"椅6", "color":"#90EE90", "pos":"60 0", "group":"G1"},
-{"key":"椅7", "color":"#90EE90", "pos":"100 0", "group":"G1"},
-{"key":"椅8", "color":"#90EE90", "pos":"140 20", "group":"G1"},
-{"key":"椅9", "color":"#90EE90", "pos":"140 60", "group":"G1"},
-{"key":"椅10", "color":"#90EE90", "pos":"140 100", "group":"G1"}
- ],
-  "linkDataArray": []}`
-                localStorage.setItem('modelInfo', modelInfo)
             }
         },
+        created() {
+            localStorage.getItem('modelInfo') ? localStorage.removeItem('modelInfo') : ''
+        },
         mounted() {
+            localStorage.getItem('modelInfo') ? localStorage.removeItem('modelInfo') : ''
             this.initialModelInfo()
-            this.init()
+            setTimeout(() => {
+                this.init()
+            }, 1000)
             this.$bus.$on('modelType', data => {
                 if (data.type === 'show') {
                     this.$refs.blo.style.display = 'none'
                     this.$refs.opt.style.display = 'none'
                 } else if (data.type === 'opt') {
-                    // this.$refs.blo.style.display = 'none'
-                    // this.$refs.opt.style.display = 'none'
                 }
             })
+        },
+        destroyed() {
+            localStorage.getItem('modelInfo') ? localStorage.removeItem('modelInfo') : ''
         }
     }
 </script>

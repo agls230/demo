@@ -4,7 +4,7 @@
         <nav-bars/>
         <div class="">
             <div>
-                <div id="demo" class="carousel slide col-12 mt-3 mb-3 carouselPhoto" data-ride="carousel">
+                <div id="demo" class="carousel slide w-100 carouselPhoto" data-ride="carousel">
 
                     <!-- 指示符 -->
                     <ul class="carousel-indicators">
@@ -37,14 +37,38 @@
                 </div>
             </div>
         </div>
-        <h5 ref="tip" class="text-danger m-3"></h5>
-        <div class="mb-3 shadow">
-            <h5 ref="shopText"></h5>
+
+        <div class="shadow mb-3">
+            <h5 ref="shoppingText" class="bg-primary p-3"></h5>
             <hr>
             <div class="row no-gutters">
-                <div class="col-3 col-md-1 m-3 con" v-for="(list,index) in allShop">
-                    <div @click="detailShop(index)">
-                        <img src="../assets/shop.jpg" width="100%" height="100%">
+                <div class="col-5 col-md-2 m-3 con shadow" v-for="(list,index) in allShopping">
+                    <div class="small name text-secondary" @click="detailShopping(index)"><i
+                            class="bi-person-plus-fill"></i>发起者：{{list.leader.username}}
+                    </div>
+                    <div class="name text-secondary" @click="detailShopping(index)"><i
+                            class="bi-calendar2-event"></i>活动：{{list.name}}
+                    </div>
+                    <div class="text-secondary content" @click="detailShopping(index)"><i
+                            class="bi-people-fill"></i>最大人数：{{list.peopleNumber}}
+                    </div>
+                    <div class="text-secondary content" @click="detailShopping(index)"><i
+                            class="bi-chat-right-dots"></i>详情：{{list.content}}
+                    </div>
+                </div>
+                <div v-show="team" class="h5 text-secondary" style="height: 190px;line-height: 190px;margin: 0 auto">
+                    暂无正在组建的队伍。
+                </div>
+            </div>
+        </div>
+        <h5 ref="tip" class="text-danger m-3"></h5>
+        <div class="mb-3 shadow">
+            <h5 ref="shopText" class="bg-primary p-3"></h5>
+            <hr>
+            <div class="row no-gutters">
+                <div class="col-3 col-md-1 m-3 con shadow" v-for="(list,index) in allShop">
+                    <div style="overflow: hidden;width: auto;height: auto" @click="detailShop(index)">
+                        <img style="border-radius: 10px" alt="" :src=imgUrl[index] width="100%" height="100%">
                     </div>
                     <div class="d-inline-block w-75 name" @click="detailShop(index)">{{list.name}}</div>
                     <div class="text-right d-inline-block small w-25 text-secondary">
@@ -52,24 +76,6 @@
                         {{list.star}}
                     </div>
                     <div class="small text-secondary content" @click="detailShop(index)">{{list.content}}</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="shadow mb-3">
-            <h5 ref="shoppingText"></h5>
-            <hr>
-            <div class="row no-gutters">
-                <div class="col-3 col-md-1 m-3 con" v-for="(list,index) in allShopping">
-                    <div @click="detailShopping(index)">
-                        <img src="../assets/shopping.jpg" width="100%" height="100%">
-                    </div>
-                    <div class="d-inline-block w-75 name" @click="detailShopping(index)">{{list.name}}</div>
-                    <div class="text-right d-inline-block small w-25 text-secondary">
-                        <i class="bi-star-fill text-warning small"></i>
-                        {{list.price}}
-                    </div>
-                    <div class="small text-secondary content" @click="detailShopping(index)">{{list.content}}</div>
                 </div>
             </div>
         </div>
@@ -94,33 +100,41 @@
         data() {
             return {
                 allShop: [],
-                allShopping: []
+                allShopping: [],
+                team: false,
+                imgUrl: [
+                    require("../assets/photo/1.jpeg"),
+                    require('../assets/photo/2.webp'),
+                    require('../assets/photo/3.webp'),
+                    require('../assets/photo/4.webp'),
+                    require('../assets/photo/5.webp'),
+                    require('../assets/photo/6.webp')
+                ]
             }
         },
         methods: {
-            ...mapMutations(['changeComment']),
+            ...mapMutations(['changeComment', 'changeShopId']),
             // 跳转到商店详情页
             detailShop(index) {
+                const _this = this
+                _this.changeComment({id: this.allShop[index].id, type: 'shop'})
+                _this.changeShopId(this.allShop[index].id)
                 this.$router.push({
                     path: '/shopDetail',
                     query: {shopId: this.allShop[index].id}
                 })
-                const _this = this
-                _this.changeComment({id: this.allShop[index].id, type: 'shop'})
             },
             // 跳转到商店详情页
             detailShopping(index) {
                 this.$router.push({
-                    path: '/shopDetail',
-                    query: {shopId: this.allShop[index].id}
+                    path: '/team',
+                    // query: {shopId: this.allShop[index].id}
                 })
-                const _this = this
-                _this.changeComment({id: this.allShop[index].id, type: 'shop'})
             }
         },
         mounted() {
             this.$refs.shopText.innerHTML = '推荐店铺'
-            this.$refs.shoppingText.innerHTML = '推荐店品'
+            this.$refs.shoppingText.innerHTML = '当前组队'
             // 商铺
             new Promise((resolve, reject) => {
                 request({
@@ -134,19 +148,23 @@
                 this.allShop = []
                 this.allShop = res.data.shops
             })
-
+            // 组队
             new Promise((resolve, reject) => {
                 request({
-                    method: 'post',
-                    url: '/commodity/getAllCommodityAndControl'
+                    method: 'get',
+                    url: '/team/findAllByUsing'
                 }).then(res => {
                     resolve(res)
-                }).catch(err => {
-                    reject(err)
                 })
             }).then(res => {
-                this.allShopping = []
-                this.allShopping = res.data.commodityDtoSet
+                console.log(res.data.teams)
+                if (res.data.teams.length === 0) {
+                    this.allShopping = []
+                    this.team = true
+                } else {
+                    this.allShopping = []
+                    this.allShopping = res.data.teams
+                }
             })
             this.$bus.$on('seInfo', data => {
                 if (data.shop === -1) {
@@ -181,10 +199,22 @@
         overflow: hidden;
     }
 
+    .con {
+        border-radius: 10px;
+        padding: 6px;
+        background-color: #F0F8FF;
+    }
+
     .con div {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .con:hover {
+        transform: scale(1.1);
+        transition: all 0.3s;
+        background-color: lightskyblue;
     }
 
     .name:hover, .content:hover {

@@ -48,7 +48,7 @@
             <button class="btn btn-block btn-outline-primary btn-sm" @click="updateSU()">修改权限标识符、路径</button>
             <button class="btn btn-block btn-outline-primary btn-sm" @click="updateNSU()">修改权限名、标识符、路径</button>
         </div>
-        <foot class="foot"></foot>
+<!--        <foot class="foot"></foot>-->
         <to-top/>
     </div>
 </template>

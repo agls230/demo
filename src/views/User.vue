@@ -37,7 +37,7 @@
                 </tbody>
             </table>
         </div>
-        <foot/>
+<!--        <foot/>-->
         <to-top/>
     </div>
 </template>

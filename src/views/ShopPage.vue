@@ -182,6 +182,7 @@
     import {error, success, tip} from "../util/promptBox";
     import Model from "../components/Model";
     import Maps from "../components/Maps";
+    import {mapMutations} from "vuex";
 
     export default {
         name: "shopPage",
@@ -192,7 +193,7 @@
                 shopInfo: '',
                 updInfo: '修改',
                 switch: true,
-                shopId: 1,
+                shopId: this.$store.state.shopId,
                 upd: false,
                 state: false,
                 add: false,
@@ -211,46 +212,65 @@
             }
         },
         methods: {
+            ...mapMutations(["changeShopId"]),
             init() {
-                // 查询本店所有商品
-                new Promise((resolve, reject) => {
+                // 根据用户id查询商铺id
+                request({
+                    method: 'post',
+                    params: {
+                        uid: localStorage.getItem('userId')
+                    },
+                    url: '/shop/findShopByUid'
+                }).then(res => {
+                    // console.log(res.data.shop.id)
+                    if (res.data.res === '此用户没有商铺') {
+                    } else {
+                        this.shopId = res.data.shop.id
+                        const _this = this
+                        _this.changeShopId(res.data.shop.id)
+                    }
+                    // 查询本店所有商品
+                    // new Promise((resolve, reject) => {
                     request({
                         method: 'post',
                         params: {sid: this.shopId},
                         url: '/commodity/getAllCommodityByShop'
+                        // }).then(res => {
+                        //     resolve(res)
+                        // }).catch(err => {
+                        //     reject(err)
+                        // })
                     }).then(res => {
-                        resolve(res)
+                        // console.log(res)
+                        if (res.data.res === 'ok') {
+                            this.$refs.dis.style.display = 'none'
+                            this.allInfo = []
+                            this.allInfo = res.data.commodityDtoSet
+                        } else if (res.data.res === '没有商品！') {
+                            tip('店铺暂无商品。')
+                        }
                     }).catch(err => {
-                        reject(err)
+                        error('加载错误，请刷新重试。')
                     })
-                }).then(res => {
-                    if (res.data.res === 'ok') {
-                        this.$refs.dis.style.display = 'none'
-                        this.allInfo = []
-                        this.allInfo = res.data.commodityDtoSet
-                    } else if (res.data.res === '没有商品！') {
-                        tip('店铺暂无商品。')
-                    }
-                }).catch(err => {
-                    error('加载错误，请刷新重试。')
-                })
-
-                // 店铺信息
-                new Promise((resolve, reject) => {
+                    // 店铺信息
+                    // new Promise((resolve, reject) => {
                     request({
                         method: 'post',
                         params: {sid: this.shopId},
                         url: '/shop/findById'
+                        // }).then(res => {
+                        //     resolve(res)
+                        // })
                     }).then(res => {
-                        resolve(res)
+                        if (res.data.res === 'ok') {
+                            this.shopInfo = ''
+                            this.shopInfo = res.data.shop
+                        } else {
+                            error('加载错误，请刷新重试。')
+                        }
                     })
-                }).then(res => {
-                    if (res.data.res === 'ok') {
-                        this.shopInfo = ''
-                        this.shopInfo = res.data.shop
-                    } else {
-                        error('加载错误，请刷新重试。')
-                    }
+                }).catch(err => {
+                    console.log(err)
                 })
             },
             // 修改商品弹窗开启

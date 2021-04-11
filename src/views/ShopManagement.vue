@@ -36,6 +36,9 @@
                 </tbody>
             </table>
         </div>
+        <div v-show="firstShop">
+            <button class="btn btn-sm btn-primary mb-3 col-12 col-md-1" @click="addFirstShop">新增商铺</button>
+        </div>
         <!--        修改弹框-->
         <div class="position-absolute add pt-3 pb-3 pl-5 pr-5 border bg-white col-10 col-md-4" v-show="upd">
             <div class="position-absolute clo text-right">
@@ -86,7 +89,7 @@
                 <button type="button" class="btn btn-success" @click="addSuccess">完成</button>
             </div>
         </div>
-        <foot class="foot"></foot>
+        <!--        <foot class="foot"></foot>-->
         <to-top/>
     </div>
 </template>
@@ -117,8 +120,8 @@
                 add: false,
                 names: '',
                 star: '',
-                content: ''
-
+                content: '',
+                firstShop: false
             }
         },
         components: {
@@ -137,8 +140,13 @@
                         resolve(res)
                     })
                 }).then(res => {
-                    this.allInfo = []
-                    this.allInfo = res.data.shops
+                    // console.log(res.data)
+                    if (res.data.res === '没有店铺') {
+                        this.firstShop = true
+                    } else {
+                        this.allInfo = []
+                        this.allInfo = res.data.shops
+                    }
                 })
             },
             // 修改商铺弹窗开启
@@ -246,6 +254,15 @@
             // 新增商铺弹窗
             addShop() {
                 this.add = true
+                this.names = ''
+                this.star = ''
+                this.content = ''
+            },
+            addFirstShop() {
+                this.add = true
+                this.names = ''
+                this.star = ''
+                this.content = ''
             },
             // 关闭新增商铺弹窗
             cloAdd() {
@@ -263,7 +280,9 @@
                             data: JSON.stringify({
                                 name: this.names,
                                 star: this.star,
-                                content: this.content
+                                content: this.content,
+                                // 此商铺对应的用户的id，暂时由管理员赋值
+                                uid: 4
                             }),
                             url: '/shop/create'
                         }).then(res => {
@@ -272,6 +291,7 @@
                     }).then(res => {
                         if (res.data.res === 'ok') {
                             success()
+                            this.firstShop = false
                             this.init()
                         } else {
                             error()

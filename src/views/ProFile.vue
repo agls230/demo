@@ -184,9 +184,12 @@
                 }).then(res => {
                     if (res.data.res === 'logoutSucceed') {
                         success('退出成功。')
+                        this.$router.push('/login')
                         localStorage.removeItem('token')
                         localStorage.removeItem('role')
-                        this.$router.push('/login')
+                        localStorage.removeItem('userId')
+                        localStorage.removeItem('shopId')
+                        localStorage.removeItem('modelInfo')
                     }
                 })
             }

@@ -36,7 +36,7 @@
                 <button type="button" class="btn btn-success" @click="addSuccess">完成</button>
             </div>
         </div>
-        <foot class="foot"></foot>
+<!--        <foot class="foot"></foot>-->
         <to-top/>
     </div>
 </template>

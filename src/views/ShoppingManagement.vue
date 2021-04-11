@@ -74,7 +74,7 @@
                 <button type="button" class="btn btn-success" @click="stateSuccess">完成</button>
             </div>
         </div>
-        <foot/>
+<!--        <foot/>-->
         <to-top/>
     </div>
 </template>

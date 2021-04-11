@@ -11,7 +11,7 @@
                 <div class="row no-gutters">
                     <div v-show="shopping" class="col-6 col-md-2 p-3 con" v-for="(list,index) in allShopping">
                         <div @click="detailShopping">
-                            <img src="../assets/shopping.jpg" width="100%" height="100%">
+                            <img style="border-radius: 10px" alt="" :src=imgUrls[index] width="150px" height="150px">
                         </div>
                         <div>
                             <span class="float-left name" @click="detailShopping">{{list.name}}</span>
@@ -25,7 +25,7 @@
 
                     <div v-show="shop" class="col-6 col-md-2 p-3 con" v-for="(list,index) in allShop">
                         <div @click="detailShop(index)">
-                            <img src="../assets/shop.jpg" width="100%" height="100%">
+                            <img style="border-radius: 10px" alt="" :src=imgUrl[index] width="100%" height="100%">
                         </div>
                         <div>
                             <span class="float-left name" @click="detailShop(index)">{{list.name}}</span>
@@ -61,6 +61,22 @@
                 allShop: [],
                 shopping: true,
                 shop: false,
+                imgUrl: [
+                    require("../assets/photo/1.jpeg"),
+                    require('../assets/photo/2.webp'),
+                    require('../assets/photo/3.webp'),
+                    require('../assets/photo/4.webp'),
+                    require('../assets/photo/5.webp'),
+                    require('../assets/photo/6.webp')
+                ],
+                imgUrls: [
+                    require("../assets/shopping/1.webp"),
+                    require("../assets/shopping/2.webp"),
+                    require("../assets/shopping/3.webp"),
+                    require("../assets/shopping/4.webp"),
+                    require("../assets/shopping/5.webp"),
+                    require("../assets/shopping/6.webp")
+                ]
 
             }
         },
@@ -83,7 +99,7 @@
                         this.allShopping = []
                         this.allShopping = res.data.commodityDtoSet
                     } else {
-                        error('加载错误，请刷新重试。')
+                        // error('加载错误，请刷新重试。')
                     }
                 }).catch(err => {
                     error('加载错误，请刷新重试。')
@@ -149,7 +165,7 @@
                             this.allShop = []
                             this.allShop = res.data.shops
                         } else {
-                            error('加载错误，请刷新重试。')
+                            // error('加载错误，请刷新重试。')
                         }
                     }).catch(err => {
                         error('加载错误，请刷新重试。')
@@ -166,6 +182,10 @@
 </script>
 
 <style scoped>
+    .con {
+        border-radius: 10px;
+    }
+
     .con div {
         white-space: nowrap;
         overflow: hidden;

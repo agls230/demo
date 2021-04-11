@@ -16,13 +16,13 @@
                 <!-- 轮播图片 -->
                 <div class="carousel-inner">
                     <div class="carousel-item active carouselPhoto">
-                        <img src="../assets/shop.jpg" alt="">
+                        <img src="../assets/shop.webp" alt="">
                     </div>
                     <div class="carousel-item carouselPhoto">
-                        <img src="../assets/shop.jpg" alt="">
+                        <img src="../assets/shop.webp" alt="">
                     </div>
                     <div class="carousel-item carouselPhoto">
-                        <img src="../assets/shop.jpg" alt="">
+                        <img src="../assets/shop.webp" alt="">
                     </div>
                 </div>
                 <!-- 左右切换按钮 -->
@@ -41,10 +41,14 @@
                     <h5 class="col-2"><small><i class="bi-star-fill text-warning"></i>{{shop.star}}</small></h5>
                 </div>
                 <div class="col-12">{{shop.content}}</div>
+                <div>
+                    <maps/>
+                </div>
                 <!--            操作-->
-                <div class="m-3 col-10 row position-absolute" style="bottom: 0">
+                <div class="m-3 col-10 row position-relative" style="bottom: 0">
                     <div class="col-6">组队情况
-                        <button class="btn btn-sm btn-outline-primary"><i class="bi-people-fill"></i></button>
+                        <button class="btn btn-sm btn-outline-primary" @click="toTeam"><i class="bi-people-fill"></i>
+                        </button>
                     </div>
                     <div class="col-6 text-right">去这儿
                         <button class="btn btn-sm btn-outline-success"><i class="bi-geo-alt-fill"></i></button>
@@ -76,10 +80,11 @@
     import {request} from "../network/request";
     import Comment from "../components/Comment";
     import Model from "../components/Model";
+    import Maps from "../components/Maps";
 
     export default {
         name: "ShopDetail",
-        components: {Model, Comment, ToTop, Foot, NavBars},
+        components: {Maps, Model, Comment, ToTop, Foot, NavBars},
         data() {
             return {
                 shopId: '',
@@ -111,11 +116,15 @@
                         this.shop.content = res.data.shop.content
                     })
                 }
+            },
+            toTeam() {
+                this.$router.push('/team')
             }
         },
         mounted() {
             this.shopId = this.$route.query.shopId
             this.$bus.$emit('modelType', {type: 'show'})
+            this.$bus.$emit('pageType', {type:'showShopLocation'})
             this.init()
         }
     }

@@ -16,6 +16,9 @@
                                 <button type="button" class="btn btn-primary btn-sm mt-md-0 mt-3 ml-md-3"
                                         @click="customJoin">加入队伍
                                 </button>
+                                <button type="button" class="btn btn-primary btn-sm mt-md-0 mt-3 ml-3"
+                                        @click="addTeam">新建队伍
+                                </button>
                             </form>
                         </div>
                     </div>
